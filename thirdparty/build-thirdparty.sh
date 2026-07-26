@@ -1431,13 +1431,21 @@ build_aws_sdk() {
     rm -rf "${BUILD_DIR}"
 
     # -Wno-nonnull gcc-11
-    "${CMAKE_CMD}" -G "${GENERATOR}" -B"${BUILD_DIR}" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX="${TP_INSTALL_DIR}" \
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-        -DCMAKE_PREFIX_PATH="${TP_INSTALL_DIR}" -DBUILD_SHARED_LIBS=OFF -DENABLE_TESTING=OFF \
-        -DCURL_LIBRARY_RELEASE="${TP_INSTALL_DIR}/lib/libcurl.a" -DZLIB_LIBRARY_RELEASE="${TP_INSTALL_DIR}/lib/libz.a" \
-        -DBUILD_ONLY="core;s3;s3-crt;transfer;identity-management;sts;kinesis" \
-        -DCMAKE_CXX_FLAGS="-Wno-nonnull -Wno-deprecated-literal-operator ${warning_deprecated_literal_operator} -Wno-deprecated-declarations ${warning_dangling_reference}" -DCPP_STANDARD=17
-
+    
+    "${CMAKE_CMD}" -G "${GENERATOR}" -B"${BUILD_DIR}" -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_INSTALL_PREFIX="${TP_INSTALL_DIR}" \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    -DCMAKE_PREFIX_PATH="${TP_INSTALL_DIR}" \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DENABLE_TESTING=OFF \
+    -DENABLE_UNITY_BUILD=OFF \
+    -DCURL_LIBRARY_RELEASE="${TP_INSTALL_DIR}/lib/libcurl.a" \
+    -DZLIB_LIBRARY_RELEASE="${TP_INSTALL_DIR}/lib/libz.a" \
+    -DBUILD_ONLY="core;s3;s3-crt;transfer;identity-management;sts;kinesis" \
+    -DCMAKE_CXX_FLAGS="-Wno-nonnull -Wno-deprecated-literal-operator -Wno-deprecated-declarations -Wno-error=unnecessary-virtual-specifier" \
+    -DCMAKE_CXX_FLAGS_RELEASE="-Wno-error=unnecessary-virtual-specifier" \
+    -DCPP_STANDARD=17
+    
     cd "${BUILD_DIR}"
 
     "${BUILD_SYSTEM}" -j "${PARALLEL}"

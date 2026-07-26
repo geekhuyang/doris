@@ -154,3 +154,7 @@ compile_commands.json
 
 .worktrees/
 .worktree_initialized
+.idea/
+.vscode/
+.build_profile.jsonl
+.build_profile_state.*
