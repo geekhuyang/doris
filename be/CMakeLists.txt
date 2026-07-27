@@ -558,12 +558,16 @@ FILE(GLOB_RECURSE LIB_JVM ${LIBJVM_PATH})
 if("${LIB_JVM}" STREQUAL "")
     message(STATUS "there is no libjvm found!")
 else()
+    # LIBJVM_PATH may match multiple libjvm.so (e.g. server and client);
+    # use the first one found for the imported target to avoid breaking
+    # set_target_properties with a dangling property argument.
+    list(GET LIB_JVM 0 LIB_JVM)
     set(DORIS_DEPENDENCIES
         ${DORIS_DEPENDENCIES}
         jvm
     )
     add_library(jvm SHARED IMPORTED)
-    set_target_properties(jvm PROPERTIES IMPORTED_LOCATION ${LIB_JVM})
+    set_target_properties(jvm PROPERTIES IMPORTED_LOCATION "${LIB_JVM}")
     include_directories(${DORIS_JAVA_HOME}/include)
     if (NOT OS_MACOSX)
         include_directories(${DORIS_JAVA_HOME}/include/linux)
