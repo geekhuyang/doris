@@ -36,3 +36,5 @@
 	path = doris-skills
 	url = https://github.com/apache/doris-skills
 	branch = main
+[submodule "contrib/faiss"]
+	url = https://github.com/geekhuyang/doris-thirdparty.git
